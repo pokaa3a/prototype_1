@@ -8,10 +8,14 @@ public class Character : MonoBehaviour {
   public GameObject pathLine;
   public GameObject pathEndCircle;
 
-  private float speed = 1f;
+  private float speed = 2f;
+
+  // public void MoveTo(Vector2Int targetPosition) {
+  //   gameObject.transform.position = GameUtilities.GameToWorldUnit(targetPosition);
+  // }
 
   public void MoveTo(Vector2 targetPosition) {
-    gameObject.transform.position = targetPosition;
+    gameObject.transform.position = GameUtilities.GameToWorldUnit(targetPosition);
   }
 
   void Start() {
@@ -22,18 +26,19 @@ public class Character : MonoBehaviour {
     if (pathNodes.Count > 1) {
       float distanceToMove = speed * Time.deltaTime;
       float distanceMoved = 0.0f;
+      Vector2 posGame = gameObject.transform.position / GameUtilities.unit;
       while (pathNodes.Count > 1 && distanceMoved < distanceToMove) {
-        if (Vector2.Distance(gameObject.transform.position, pathNodes[1])
-            < distanceToMove - distanceMoved) {
-          distanceMoved += Vector2.Distance(gameObject.transform.position, pathNodes[1]);
+        if (Vector2.Distance(posGame, pathNodes[1]) < distanceToMove - distanceMoved) {
+          distanceMoved += Vector2.Distance(posGame, pathNodes[1]);
           MoveTo(pathNodes[1]);
           pathNodes.RemoveAt(0);
         } else {
           float t = (distanceToMove - distanceMoved) 
-                    / Vector2.Distance(gameObject.transform.position, pathNodes[1]);
+                    / Vector2.Distance(posGame, pathNodes[1]);
           distanceMoved = distanceToMove;
-          MoveTo(Vector2.Lerp(gameObject.transform.position, pathNodes[1], t));
-          pathNodes[0] = gameObject.transform.position;
+          Vector2 tmp = Vector2.Lerp(posGame, pathNodes[1], t);
+          MoveTo(Vector2.Lerp(posGame, pathNodes[1], t));
+          pathNodes[0] = posGame;
         }
       }
       Drawing.UpdateLineByList(pathLine, pathNodes);
