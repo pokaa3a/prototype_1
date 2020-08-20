@@ -5,6 +5,10 @@ using UnityEngine.Assertions;
 
 public static class GameUtilities {
   public static float unit = 0.4f;
+  public static int maxX = 12;
+  public static int minX = -12;
+  public static int maxY = 20;
+  public static int minY = -20;
 
   public static Vector2 WorldToGameUnit(Vector2 posWorld) {
     Vector2 posGame = new Vector2(Mathf.Round(posWorld.x / unit),
@@ -16,18 +20,9 @@ public static class GameUtilities {
     return Mathf.Round(valWorld / unit);
   }
 
-  // public static Vector2 GameToWorldUnit(Vector2Int posGame) {
-  //   Vector2 posWorld = new Vector2((float)posGame.x * unit, (float)posGame.y * unit);
-  //   return posWorld;
-  // }
-
   public static Vector2 GameToWorldUnit(Vector2 posGame) {
     return new Vector2(posGame.x * unit, posGame.y * unit);
   }
-
-  // public static float GameToWorldUnit(int valGame) {
-  //   return (float)valGame * unit;
-  // }
 
   public static float GameToWorldUnit(float valGame) {
     return valGame * unit;

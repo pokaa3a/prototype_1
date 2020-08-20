@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class InputHandler : MonoBehaviour {
   
@@ -14,6 +15,7 @@ public class InputHandler : MonoBehaviour {
   private GameObject level;
   private Character characterScript;
   private Level levelScript;
+  private PathFinding pathFinding;
 
   private Vector2 draggingOffset = Vector2.zero;
   // TODO: Write a class that contains path line and path nodes
@@ -32,11 +34,21 @@ public class InputHandler : MonoBehaviour {
     characterScript = character.GetComponent<Character>();
     level = GameObject.FindWithTag("Level");
     levelScript = level.GetComponent<Level>();
+    pathFinding = new PathFinding(GameUtilities.maxX, GameUtilities.minX,
+                                  GameUtilities.maxY, GameUtilities.minY);
   }
 
   void Update() {
-    Vector2 fingerPosition = 
-      GameUtilities.WorldToGameUnit(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+    Vector2 fingerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) / GameUtilities.unit;
+    if (((int)Mathf.Round(fingerPosition.x / 0.5f) % 2 + 2) % 2 == 1 &&
+        ((int)Mathf.Round(fingerPosition.y / 0.5f) % 2 + 2) % 2 == 1) {
+      fingerPosition.x = Mathf.Round(fingerPosition.x / 0.5f) * 0.5f;
+      fingerPosition.y = Mathf.Round(fingerPosition.y / 0.5f) * 0.5f;
+    } else {
+      fingerPosition.x = Mathf.Round(fingerPosition.x);
+      fingerPosition.y = Mathf.Round(fingerPosition.y);
+    }
+
     Vector2 characterPosition =
       GameUtilities.WorldToGameUnit(character.transform.position);
     if (Input.GetMouseButtonDown(0)) {
@@ -46,8 +58,17 @@ public class InputHandler : MonoBehaviour {
           Destroy(characterScript.pathEndCircle);
           characterScript.pathNodes.Clear();
         }
-        characterScript.pathLine = Drawing.CreateLine(characterPosition, fingerPosition);
-        characterScript.pathNodes = new List<Vector2>(){characterPosition, fingerPosition};
+        // Path finding
+        Vector2 targetPosition = 
+          GameUtilities.WorldToGameUnit(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        List<Vector2> path = pathFinding.FindPath((int)characterPosition.x, (int)characterPosition.y, 
+                                                   (int)targetPosition.x, (int)targetPosition.y);
+        Assert.IsNotNull(path);
+
+        // characterScript.pathNodes = new List<Vector2>(){characterPosition, fingerPosition};
+        characterScript.pathNodes = path;
+        characterScript.pathLine = Drawing.CreateLine(characterPosition, characterPosition);
+        Drawing.UpdateLineByList(characterScript.pathLine, path);
         characterScript.pathEndCircle = Drawing.CreateCircle(fingerPosition);
       } else if (checkTouchStatus(fingerPosition) == TouchStatus.dragging) {
         draggingOffset = new Vector2(GameUtilities.WorldToGameUnit(characterScript.pathEndCircle.transform.position.x), 

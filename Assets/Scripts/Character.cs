@@ -8,7 +8,7 @@ public class Character : MonoBehaviour {
   public GameObject pathLine;
   public GameObject pathEndCircle;
 
-  private float speed = 2f;
+  private float speed = 2.0f;
 
   // public void MoveTo(Vector2Int targetPosition) {
   //   gameObject.transform.position = GameUtilities.GameToWorldUnit(targetPosition);
