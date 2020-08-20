@@ -14,7 +14,7 @@ public class PathFinding {
 
   public PathFinding(int maxX, int minX, int maxY, int minY) {
     grid = new GameGrid(maxX, minX, maxY, minY, 
-                        (GameGrid g, int x, int y) => new PathNode(g, x, y));
+                        (GameGrid g, int x, int y, bool isWall) => new PathNode(g, x, y, isWall));
   }
 
   public List<Vector2> FindPath(int srcX, int srcY, int dstX, int dstY) {
