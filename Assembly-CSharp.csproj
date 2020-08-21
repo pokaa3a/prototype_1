@@ -46,13 +46,15 @@
   </PropertyGroup>
   <ItemGroup>     <Compile Include="Assets\Scripts\Character.cs" />
      <Compile Include="Assets\Scripts\Drawing.cs" />
-     <Compile Include="Assets\Scripts\GameGrid.cs" />
-     <Compile Include="Assets\Scripts\GamePlayManager.cs" />
-     <Compile Include="Assets\Scripts\GameUtilities.cs" />
+     <Compile Include="Assets\Scripts\GameUtil.cs" />
      <Compile Include="Assets\Scripts\InputHandler.cs" />
      <Compile Include="Assets\Scripts\Level.cs" />
+     <Compile Include="Assets\Scripts\MapHandler.cs" />
+     <Compile Include="Assets\Scripts\MapNode.cs" />
+     <Compile Include="Assets\Scripts\MovingPath.cs" />
      <Compile Include="Assets\Scripts\PathFinding.cs" />
-     <Compile Include="Assets\Scripts\PathNode.cs" />
+     <Compile Include="Assets\Scripts\PathFindingGrid.cs" />
+     <Compile Include="Assets\Scripts\PathFindingNode.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/pkh/GameDesign/unity/prototype_1/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
