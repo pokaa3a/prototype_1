@@ -32,4 +32,8 @@ public class PathFindingNode {
   public void CalculateFCost() {
     fCost = gCost + hCost;
   }
+
+  public bool IsWall() {
+    return MapHandler.GetMapNode(x, y).IsWall();
+  }
 }

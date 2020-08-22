@@ -39,23 +39,24 @@ public class InputHandler : MonoBehaviour {
       MapHandler.GetMapNode(GameUtil.ToGameUnitInt(
         Camera.main.ScreenToWorldPoint(Input.mousePosition)));
     MapNode characterPos = MapHandler.GetMapNode(character.GetPositionInt());
-    Assert.IsNotNull(fingerPos);
     Assert.IsNotNull(characterPos);
 
-    if (Input.GetMouseButtonDown(0)) {
-      if (checkTouchStatus(fingerPos) == TouchStatus.drawing) {
-        character.ResetPath();
-        // Path finding
-        List<Vector2> path = MapHandler.FindPath(characterPos, fingerPos);
-        Assert.IsNotNull(path);
-        character.SetPath(path);
-        character.SetEndCircle(fingerPos);
-      } else if (checkTouchStatus(fingerPos) == TouchStatus.dragging) {
-        // do nothing
+    if (fingerPos != null) {
+      if (Input.GetMouseButtonDown(0)) {
+        if (checkTouchStatus(fingerPos) == TouchStatus.drawing) {
+          character.ResetPath();
+          // Path finding
+          List<Vector2> path = MapHandler.FindPath(characterPos, fingerPos);
+          Assert.IsNotNull(path);
+          character.SetPath(path);
+          character.SetEndCircle(fingerPos);
+        } else if (checkTouchStatus(fingerPos) == TouchStatus.dragging) {
+          // do nothing
+        }
       }
-    } 
-    if (Input.GetMouseButton(0)) {
-      character.UpdatePath(fingerPos);
+      if (Input.GetMouseButton(0)) {
+        character.UpdatePath(fingerPos);
+      }
     }
   }
 }

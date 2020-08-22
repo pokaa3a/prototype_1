@@ -11,9 +11,9 @@ public class Character : MonoBehaviour {
     movingPath = new MovingPath();
   }
   void Update() {
-    if (IsMoving()) {
+    if (movingPath.HasPath()) {
       float distanceToMove = speed * Time.deltaTime;
-      movingPath.MoveAlongPath(this, distanceToMove);
+      MoveTo(movingPath.MoveAlongPath(distanceToMove));
     }
   }
   public void MoveTo(Vector2 targetPosition) {
@@ -54,6 +54,6 @@ public class Character : MonoBehaviour {
     }
   }
   public bool IsMoving () {
-    return movingPath.pathEndCircle != null;
+    return movingPath.HasPath();
   }
 }

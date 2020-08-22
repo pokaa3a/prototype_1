@@ -18,10 +18,13 @@ public static class MapHandler {
     gridArray = new MapNode[mapW, mapH];
     for (int x = GameUtil.minX; x <= GameUtil.maxX; x++) {
       for (int y = GameUtil.minY; y <= GameUtil.maxY; y++) {
-        // TODO: Chekc if it's a wall
-        bool isWall = false;
-        gridArray[x - GameUtil.minX, y - GameUtil.minY] = new MapNode(x, y, isWall);
+        gridArray[x - GameUtil.minX, y - GameUtil.minY] = new MapNode(x, y);
       }
+    }
+
+    List<Vector2Int> walls = CSVReader.LoadMap();
+    foreach (Vector2Int w in walls) {
+      gridArray[w.x - GameUtil.minX, w.y - GameUtil.minY].SetWall(true);
     }
   }
 
@@ -30,8 +33,8 @@ public static class MapHandler {
   }
 
   public static List<Vector2> FindPath(MapNode startNode, MapNode endNode) {
-    Assert.IsFalse(startNode.isWall());
-    Assert.IsFalse(startNode.isWall());
+    Assert.IsFalse(startNode.IsWall());
+    Assert.IsFalse(startNode.IsWall());
     List<PathFindingNode> pathNodes = pathFinding.FindPath(startNode, endNode);
     List<Vector2> outputPath = new List<Vector2>();
     // TODO: Smooth the path

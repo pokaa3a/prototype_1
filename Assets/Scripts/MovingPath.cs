@@ -12,8 +12,10 @@ public class MovingPath {
     pathNodes = new List<Vector2>();
   }
 
-  public void MoveAlongPath(Character character, float distanceToMove) {
+  public Vector2 MoveAlongPath(float distanceToMove) {
+    Assert.IsTrue(HasPath());
     float distanceMoved = 0.0f;
+    Vector2 endPt = pathNodes[0];
     while (pathNodes.Count > 1 && distanceMoved < distanceToMove) {
       // |------|     (d = distance between nodes)
       // |--------->  Case: A (d < distanceToMove - distanceMoved)
@@ -21,25 +23,28 @@ public class MovingPath {
       if (Vector2.Distance(pathNodes[0], pathNodes[1]) < distanceToMove - distanceMoved) {
         // Case A
         distanceMoved += Vector2.Distance(pathNodes[0], pathNodes[1]);
-        character.MoveTo(pathNodes[1]);
+        // character.MoveTo(pathNodes[1]);
+        endPt = pathNodes[1];
         pathNodes.RemoveAt(0);
       } else {
         // Case B
         float t = (distanceToMove - distanceMoved)
                     / Vector2.Distance(pathNodes[0], pathNodes[1]);
-        // Debug.Log("Node 0: " + pathNodes[0].x + ", " + pathNodes[0].y);
-        // Debug.Log("Node 1: " + pathNodes[1].x + ", " + pathNodes[1].y);
-        // Debug.Log("t = " + t);
-        Vector2 endPoint = Vector2.Lerp(pathNodes[0], pathNodes[1], t);
+        endPt = Vector2.Lerp(pathNodes[0], pathNodes[1], t);
         distanceMoved = distanceToMove;
-        character.MoveTo(endPoint);
-        pathNodes[0] = endPoint;
+        // character.MoveTo(endPoint);
+        pathNodes[0] = endPt;
       }
     }
     if (pathNodes.Count < 2) {
       Reset();
     }
     Drawing.UpdateLineByList(pathLine, pathNodes);
+    return endPt;
+  }
+
+  public bool HasPath() {
+    return pathNodes.Count > 0;
   }
 
   public void SetPath(List<Vector2> path) {
@@ -60,7 +65,7 @@ public class MovingPath {
   public void Reset() {
     pathNodes.Clear();
     if (pathLine != null) {
-      Assert.IsNotNull(pathEndCircle);
+      // Assert.IsNotNull(pathEndCircle);
       Object.Destroy(pathLine);
       Object.Destroy(pathEndCircle);
     }

@@ -75,7 +75,7 @@ public class PathFinding {
       for (int y = -1; y <= 1; y++) {
         if (x == 0 && y == 0) continue;
         PathFindingNode neighborNode = grid.GetGridNode(curNode.x + x, curNode.y + y);
-        if (neighborNode != null) {
+        if (neighborNode != null && !neighborNode.IsWall()) {
           neighborList.Add(neighborNode);
         }
       }
